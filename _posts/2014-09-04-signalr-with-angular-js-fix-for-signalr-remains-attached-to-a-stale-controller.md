@@ -3,10 +3,8 @@ author: micdemarco
 comments: true
 date: 2014-09-04 14:03:09+00:00
 layout: post
-link: https://micdemarco.wordpress.com/2014/09/04/signalr-with-angular-js-fix-for-signalr-remains-attached-to-a-stale-controller/
 slug: signalr-with-angular-js-fix-for-signalr-remains-attached-to-a-stale-controller
 title: SignalR with Angular JS - Fix for SignalR remains attached to a stale controller
-wordpress_id: 5
 tags:
 - angular
 - firebootcamp

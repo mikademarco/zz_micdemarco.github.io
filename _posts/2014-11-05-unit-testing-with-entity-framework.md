@@ -3,10 +3,13 @@ author: micdemarco
 comments: true
 date: 2014-11-05 14:07:35+00:00
 layout: post
-link: https://micdemarco.wordpress.com/2014/11/05/unit-testing-with-entity-framework/
 slug: unit-testing-with-entity-framework
 title: Unit Testing With Entity Framework
-wordpress_id: 3
+tags:
+- c#
+- unit testing
+- visual studio
+- entity framework
 ---
 
 While working on a project involving Integration between Web Services and an MsSQL Database accessed through Entity Framework, I decided to use a Test Driven Approach.

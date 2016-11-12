@@ -3,15 +3,14 @@ author: micdemarco
 comments: true
 date: 2015-06-25 15:59:07+00:00
 layout: post
-link: https://micdemarco.wordpress.com/2015/06/25/mvc-angular-less-gulp-tfs-vso/
 slug: mvc-angular-less-gulp-tfs-vso
 title: MVC + Angular + Less + Gulp + TFS + VSO
-wordpress_id: 41
 tags:
 - angular
-- Gulp
-- MVC
-- TFS
+- gulp
+- mvc
+- tfs
+- c#
 ---
 
 [![asp.net-gulp](/assets/2015-06-26_02-04-09.png)](/assets/2015-06-26_02-04-09.png)

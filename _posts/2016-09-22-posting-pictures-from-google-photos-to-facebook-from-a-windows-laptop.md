@@ -3,15 +3,13 @@ author: micdemarco
 comments: true
 date: 2016-09-22 02:50:15+00:00
 layout: post
-link: https://micdemarco.wordpress.com/2016/09/22/posting-pictures-from-google-photos-to-facebook-from-a-windows-laptop/
 slug: posting-pictures-from-google-photos-to-facebook-from-a-windows-laptop
 title: Posting pictures from Google Photos to Facebook using a Windows Laptop
-wordpress_id: 219
 tags:
-- Facebook
-- Google Photos
-- Picasa
-- Windows
+- facebook
+- google photos
+- picasa
+- windows
 ---
 
 As a Google Photos and Facebook user, it has always bothered me how difficult it is to share pictures from one app to the other from a Laptop.
