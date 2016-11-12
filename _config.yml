@@ -40,3 +40,5 @@ gems:
 
 disqus:
   shortname: micdemarco
+
+ google_analytics: UA-87269464-1
