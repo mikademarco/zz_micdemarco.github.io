@@ -86,11 +86,11 @@ Next we need to add front end packages to the project using bower.
 
 1. Add a file bower.json to the project root
 
-https://gist.github.com/miczdem/8469cb120eb20e1313b4
+{% gist micdemarco/8469cb120eb20e1313b4 %}
 
 2. Add a file packages.json to the project root
 
-https://gist.github.com/miczdem/54d241a4a33050893f21
+{% gist micdemarco/54d241a4a33050893f21 %}
 
 3. Open a command prompt and run
 
@@ -143,8 +143,9 @@ The result of the above steps is a directory structure like the following:
 
 Great, we are now managing all front end libraries with bower.  These can be referenced by your cshtml files as:
 
+```html
 <script src="/bower_components/angular/angular.js"></script>
-
+```
 
 # 2. Use gulp to watch and compile my less files every time I make a change
 
@@ -169,19 +170,20 @@ Approach
 
 1. Create a master style.less that points to all application less files:
 
-https://gist.github.com/miczdem/b18032252bc51943fc66
+{% gist micdemarco/b18032252bc51943fc66 %}
 
 2. Create a gulp task to watch you less files, and compile the less:
 
-https://gist.github.com/miczdem/3e083b51ecb83e4059b4
+{% gist micdemarco/3e083b51ecb83e4059b4 %}
 
 Note: Line 1 tells the Task Runner plugin to run the task.  This is slightly different in VS 2015
 /// <vs SolutionOpened='dev:watch' />
 
 All that is needed is to reference the compiled css:
 
+```html
 <link href="/Content/Css/style.css" rel="stylesheet" />
-
+```
 
 # 3. Use gulp-bundle-assets to compile source files every time I make a change
 
@@ -224,18 +226,19 @@ Approach:
 This file will go under
 C:\Code\Demo\Demo.WebUI\Content\Bundles\bundle.main.copy.config
 
-https://gist.github.com/miczdem/052f3e3c941a3caeb9a3
+{% gist micdemarco/052f3e3c941a3caeb9a3 %}
 
 4. Create a new task in the gulpfile.js to build the scripts and extend the watch task:
 
-https://gist.github.com/miczdem/8268d10fd10bb423bf9b
+{% gist micdemarco/8268d10fd10bb423bf9b %}
 
 **Note: the rev:false option will always generate the same output file.  **
 
 The watch task will ensure that every change to a *.js file under /Content/App will generate a new scripts bundle.  It can be referenced as:
 
+```html
 <script src="/Content/Bundles/Debug/assets/main-scripts.js"></script>
-
+```
 
 # 4. Build all front end scripts and styles into separate files for vendor and application
 
@@ -262,35 +265,36 @@ I would now like to take my front end build a few steps farther.  I would like 
 
 1. Add a bundle config for main styles:
 
-https://gist.github.com/miczdem/6785bc49ee9420aae0be
+{% gist micdemarco/6785bc49ee9420aae0be %}
 
 2. Add a bundle config for copying template files:
 
-https://gist.github.com/miczdem/55c4709399dc948be15a
+{% gist micdemarco/55c4709399dc948be15a %}
 
 3. Add a bundle config for vendor files:
 
-https://gist.github.com/miczdem/3d7dfac443ff882c3db2
+{% gist micdemarco/3d7dfac443ff882c3db2 %}
 
 4. Add a bundle config for copying fonts and images
 
-https://gist.github.com/miczdem/a8e6e748cb01b1917588
+{% gist micdemarco/a8e6e748cb01b1917588 %}
 
 5. Add gulp tasks for each of the separate bundle config files, and a main **bundle** task to run them all in sequence:
 
-https://gist.github.com/miczdem/06661961beab095b9eca
+{% gist micdemarco/06661961beab095b9eca %}
 
 **Note 1: Also added an install task to run "npm install" and "bower install" from gulp**
 ** Note 2: Added task runner configuration /// <vs BeforeBuild='bundle' SolutionOpened='dev:watch, install' />**
 
 In order to reference the correct files I will need the following references:
 
+```html
 <link href="~/Content/Bundles/Debug/assets/vendor-styles.css" rel="stylesheet" />
 <link href="~/Content/Bundles/Debug/assets/main-styles.css" rel="stylesheet" />
 
 <script src="/Content/Bundles/Debug/assets/vendor-scripts.js"></script>
 <script src="/Content/Bundles/Debug/assets/main-scripts.js"></script>
-
+```
 
 # 5. Use the MVC Bundler to serve the compiled front end files
 
@@ -307,7 +311,7 @@ Approach:
 
 1. Configure 2 bundles in BundleConfig.cs:
 
-https://gist.github.com/miczdem/2d306d6917914087f600
+{% gist micdemarco/2d306d6917914087f600 %}
 
 **Note: The BundleConfig can be configured to serve different bundles such as Release/Debug based on the environment.**
 
@@ -357,7 +361,7 @@ Approach
 
 4. Add the following sections to your csproj at the end after all the imports sections:
 
-https://gist.github.com/miczdem/c20700926f98e5a2f0c8
+{% gist micdemarco/c20700926f98e5a2f0c8 %}
 
 5. The only files that you need to check in are your gulpfile.js and /Content/Bundles/bundle.*.js
 
