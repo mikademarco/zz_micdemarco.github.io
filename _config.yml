@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Mic De Marco's blog
+title: Mic's blog
 email: miczdem@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   A tech blog about things I find interesting or problems that required me to do some research and any random fun stuff I come across while coding  
@@ -37,3 +37,6 @@ port: 4000
 
 gems:
   - jekyll-gist
+
+disqus:
+  shortname: micdemarco
