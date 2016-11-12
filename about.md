@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-I am a full stack developer working as a contractor while travelling.  I program mostly in javascript and c# and right now am really psyched about docker containers, aspnet core and angular 2
+I am a full stack developer working as a contractor while travelling.  I program mostly in javascript and c# and right now am really psyched about docker containers, aspnet core, angular 2 and ionic 
