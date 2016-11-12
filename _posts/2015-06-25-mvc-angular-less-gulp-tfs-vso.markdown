@@ -60,7 +60,7 @@ Firstly set up your environment.  (note these steps are for VS2013 and can be s
 
 	
   2. Install Git (required by bower) : [https://git-scm.com/downloads](https://git-scm.com/downloads) (add Git commands to the path)
-[![Git](/assets/untitled.png)](/assets/untitled.png)
+[![Git](/assets/2015-06-25-22-22-23.png)](/assets/2015-06-25-22-22-23.png)
 
 	
   3. Install Node : [https://nodejs.org/download/](https://nodejs.org/download/)
@@ -319,8 +319,8 @@ Now we can be sure that the files served to the client will always be up to da
 
 **Note: Through the use of source maps, you can also debug and edit the source files inside chrome by mapping the scripts to the source code directory within dev tools:**
 
-[![chrome](/assets/chrome.png)
-](/assets/chrome.png)**Figure: Adding mapped sources to file system from chrome dev tools**
+[![chrome](/assets/2015-06-25-22-22-22.png)
+](/assets/2015-06-25-22-22-22.png)**Figure: Adding mapped sources to file system from chrome dev tools**
 
 
 # 6. Integrate the front end build with an on premises TFS Build connected to VSO TFS
