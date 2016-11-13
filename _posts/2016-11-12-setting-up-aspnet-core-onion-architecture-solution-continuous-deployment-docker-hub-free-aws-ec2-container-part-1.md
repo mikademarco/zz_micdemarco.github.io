@@ -180,7 +180,11 @@ Now if we run docker images we will see the newly built image
 C:\code\Mic.Fraz>docker images
 REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
 mic.fraz               latest              2878eaaf2b6a        18 hours ago        580.9 MB
+microsoft/aspnetcore   latest              859cfeaa74cd        4 days ago          266.8 MB
+microsoft/dotnet       latest              486c56e26c1a        4 days ago          537.5 MB
 ```
+
+590.9 MB ... yes its huge.  The dotnet image is big to start.  The aspnetcore image that can be used for running a compiled app is around half the size. 
 
 Next we can test run the image in a container to see if it works
 
