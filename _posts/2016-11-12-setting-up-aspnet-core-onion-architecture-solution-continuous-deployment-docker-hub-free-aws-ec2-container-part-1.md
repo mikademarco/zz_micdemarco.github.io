@@ -61,7 +61,8 @@ The api simply returns a new User from the repository.
         }
 
         public async Task<User> GetAsync(int id)
-        {            
+        {          
+            // normally an async database operation goes here  
             return new User()
             {
                 Id = id,
