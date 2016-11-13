@@ -197,5 +197,5 @@ Accessing the api on localhost port 8080 will show results from the api running 
 
 # Part 2 - Coming soon
 
-In Part 2, I will describe the steps and gotchas of setting up continuous deployment to docker hub and hosting it in a free aws EC2 container.    
+In Part 2, I will describe the steps and gotchas of setting up continuous deployment using docker hub free aws EC2 container hosting.    
 
