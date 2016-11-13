@@ -109,7 +109,7 @@ ENTRYPOINT ["dotnet","./src/Mic.Fraz.Api/bin/Debug/netcoreapp1.0/publish/Mic.Fra
 What this file does: 
 
 1. Starts off with the microsoft/dotnet:latest image
-2. Copies the whole solution to a filder /app inside the image
+2. Copies the whole solution to a folder /app inside the image
 3. Changes to working directory /app
 4. Runs restore for all projects 
 5. Publishes the Api app
