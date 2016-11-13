@@ -124,13 +124,13 @@ Next we are ready to build the image.
 In the root directory of the solution, run the command:
 
 ```
-C:\work\personal\Mic.Fraz>docker build -t mic.fraz:latest .
+C:\code\Mic.Fraz>docker build -t mic.fraz:latest .
 ```
 
 The output will look like:
 
 ```
-C:\work\personal\Mic.Fraz>docker build -t mic.fraz:latest .
+C:\code\Mic.Fraz>docker build -t mic.fraz:latest .
 Sending build context to Docker daemon 3.669 MB
 Step 1 : FROM microsoft/dotnet:latest
  ---> 486c56e26c1a
@@ -176,7 +176,7 @@ SECURITY WARNING: You are building a Docker image from Windows against a non-Win
 Now if we run docker images we will see the newly built image
 
 ```
-C:\work\personal\Mic.Fraz>docker images
+C:\code\Mic.Fraz>docker images
 REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
 mic.fraz               latest              2878eaaf2b6a        18 hours ago        580.9 MB
 ```
@@ -184,7 +184,7 @@ mic.fraz               latest              2878eaaf2b6a        18 hours ago     
 Next we can test run the image in a container to see if it works
 
 ```
-C:\work\personal\Mic.Fraz>docker run -d -p 8080:5000 mic.fraz:latest
+C:\code\Mic.Fraz>docker run -d -p 8080:5000 mic.fraz:latest
 24f0f63dbcd5ba01d7e2271e73d2ee709ea09ee230b9e12b6c910935dcc68f05
 ```
 
