@@ -20,9 +20,9 @@ In this blog post I am going to run through the following steps:
 - Part 1 - Creating a new aspnet core solution in visual studio with multiple projects, following the onion architecture and running it in a docker container.
 - Part 2 - Setting up continuous deployment of the solution using docker hub running on a free aws EC2 container
 
-# Step 1 - Create a solution in VS and scaffold an basic onion architecture.
+# Step 1 - Create a solution in VS and scaffold a basic onion architecture.
 
-I am using Visual Studio 2015 to create a new aspnet core web api in a solution, and then added a business and repository layer.
+I am using Visual Studio 2015 to create a new aspnet core web api in a solution, and then adding a business and a repository layer.
 
 This is what the solution looks like:
 
@@ -30,9 +30,9 @@ This is what the solution looks like:
 
 The code is available [on github](https://github.com/micdemarco/Mic.Fraz)
 
-In the solution I have created the the scaffolding for an onion architecture for demonstration, without implementing any repository or business logic.
+In the solution I have created the basic scaffolding for an onion architecture.  It is for demonstration purposes, without implementing any repository or business logic.
 
-The api Get method returns a new User from a dummy repository through the UserManager.    
+I have added a User controller with a single Get method that returns a new User from a dummy repository through the UserManager.    
 
 ```csharp
     [Route("api/[controller]")]
