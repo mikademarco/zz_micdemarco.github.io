@@ -28,7 +28,11 @@ This is what the solution looks like:
 
 ![Solution structure](/assets/2016-11-13_15-42-11.png) 
 
-The api simply returns a new User from the repository.
+The code is available [on github](https://github.com/micdemarco/Mic.Fraz)
+
+In the solution I have created the the scaffolding for an onion architecture for demonstration, without implementing any repository or business logic.
+
+The api Get method returns a new User from a dummy repository through the UserManager.    
 
 ```csharp
     [Route("api/[controller]")]
@@ -76,17 +80,15 @@ When I run the solution I get this in my browser:
 
 ![Run in chrome](/assets/2016-11-13_15-42-12.png) 
 
-The code is available [on github](https://github.com/micdemarco/Mic.Fraz)
-
 # Step 2 - Install docker and run microsoft/dotnet:latest image
 
 There are many tutorials on getting started with docker so I won't go into that.  The [docker getting started docs](https://docs.docker.com/engine/getstarted/) are excellent! 
 
-For the next step we will be using the [microsoft/dotnet image](https://hub.docker.com/r/microsoft/dotnet/) which contains the sdk for building dotnet core applications.
+In the next step I will be using the [microsoft/dotnet image](https://hub.docker.com/r/microsoft/dotnet/) which contains the sdk for building dotnet core applications.
 
 # Step 3 - Create and run a docker image
 
-Next we will create a docker file that will take out solution, compile it and run it.
+Next create a docker file that will copy the solution files, compile it and run it.
 
 In the solution root, create a Dockerfile and add the following:
 
@@ -104,7 +106,7 @@ ENV ASPNETCORE_URLS http://*:5000
 ENTRYPOINT ["dotnet","./src/Mic.Fraz.Api/bin/Debug/netcoreapp1.0/publish/Mic.Fraz.Api.dll"]
 ```
 
-What this file does is: 
+What this file does: 
 
 1. Starts off with the microsoft/dotnet:latest image
 2. Copies the whole solution to a filder /app inside the image
@@ -114,13 +116,13 @@ What this file does is:
 6. Exposes port 5000 and defines port 5000 as the port for ASPNETCORE_URLS
 7. Defines the entry point command for the image as the published dll
 
-*Note/Disclaimer:*
+*Note:*
 
 *There are many different ways the compilation can be done resulting in smaller and more optimised images. This method can take a raw repository and compile and run it without any additional dependencies.*  
 
 *You could alternatively build and publish the app outside of the image and just copy the published files, meaning you would not need to perform any of the build, restore and publish commands inside the image.  This will result in a quicker build time and smaller image.*
 
-Next we are ready to build the image.
+With the docker file in place, the docker image can be built.
 
 In the root directory of the solution, run the command:
 
@@ -174,7 +176,7 @@ SECURITY WARNING: You are building a Docker image from Windows against a non-Win
 
 ```
 
-Now if we run docker images we will see the newly built image
+Running `docker images` command will show the newly built image:
 
 ```
 C:\code\Mic.Fraz>docker images
@@ -184,16 +186,16 @@ microsoft/aspnetcore   latest              859cfeaa74cd        4 days ago       
 microsoft/dotnet       latest              486c56e26c1a        4 days ago          537.5 MB
 ```
 
-590.9 MB ... yes its huge.  The dotnet image is big to start.  The aspnetcore image that can be used for running a compiled app is around half the size. 
+*Note the size.  590.9 MB ... yes its huge.  The dotnet image is big to start.  The aspnetcore image that can be used for running a compiled app is around half the size.* 
 
-Next we can test run the image in a container to see if it works
+The image can now be started in a container using the `docker run` command:
 
 ```
 C:\code\Mic.Fraz>docker run -d -p 8080:5000 mic.fraz:latest
 24f0f63dbcd5ba01d7e2271e73d2ee709ea09ee230b9e12b6c910935dcc68f05
 ```
 
-The above command starts the image that we just created in detached mode and bunds local port 8080 to the container's port 5000 
+The above command starts the image in detached mode (-d) and binds local port 8080 to the container's port 5000, 
 
 Accessing the api on localhost port 8080 will show results from the api running in the container: 
 
