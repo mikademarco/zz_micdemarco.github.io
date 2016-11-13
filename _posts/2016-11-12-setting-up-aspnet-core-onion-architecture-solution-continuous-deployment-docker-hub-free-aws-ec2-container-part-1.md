@@ -18,7 +18,7 @@ tags:
 In this blog post I am going to run through the following steps:
 
 - Part 1 - Creating a new aspnet core solution in visual studio with multiple projects, following the onion architecture and running it in a docker container.
-- Part 2 - Setting up continuous deployment of the solution using docker hub running a free aws EC2 containers
+- Part 2 - Setting up continuous deployment of the solution using docker hub running on a free aws EC2 container
 
 # Step 1 - Create a solution in VS and scaffold an basic onion architecture.
 
