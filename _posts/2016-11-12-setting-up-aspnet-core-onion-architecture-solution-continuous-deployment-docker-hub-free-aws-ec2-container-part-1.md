@@ -203,8 +203,7 @@ Accessing the api on localhost port 8080 will show results from the api running 
 
 ![Run in chrome](/assets/2016-11-13_15-42-13.png) 
 
-*Update Part 2 published*
-# Part 2 - Click [here](2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-2/)
+*Update 22/11/2016 [Part 2](/2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-2/) published*
 
 In [Part 2](/2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-2/), I describe the steps and gotchas of setting up continuous deployment using docker hub free aws EC2 container hosting.    
 
