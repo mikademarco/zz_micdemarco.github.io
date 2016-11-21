@@ -19,8 +19,8 @@ tags:
 
 In this blog post I am going to run through the following steps.  The post is split into 2 parts:
 
-- [Part 1](2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-1/) - Creating a new aspnet core solution in visual studio with multiple projects, following the [onion architecture](https://rules.ssw.com.au/do-you-know-the-layers-of-the-onion-architecture)  and running it in a docker container.
-- [Part 2](2016/11/19/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-2/) - Setting up continuous deployment of the solution using docker hub running on a free aws EC2 container
+- [Part 1](/2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-1/) - Creating a new aspnet core solution in visual studio with multiple projects, following the [onion architecture](https://rules.ssw.com.au/do-you-know-the-layers-of-the-onion-architecture)  and running it in a docker container.
+- [Part 2](/2016/11/19/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-2/) - Setting up continuous deployment of the solution using docker hub running on a free aws EC2 container
 
 # Step 1 - Create a solution in VS and scaffold a basic onion architecture.
 
