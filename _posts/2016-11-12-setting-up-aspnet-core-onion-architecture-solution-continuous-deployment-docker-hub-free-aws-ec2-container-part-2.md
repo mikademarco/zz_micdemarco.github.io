@@ -49,7 +49,7 @@ Once it is deployed you will see it under node clusters :
 3. Select a repository that you would like to publish and choose a source branch
 ![Repository settings](/assets/2016-11-21_22-53-16.png)
 
-4. Initially there wil be no builds available.  You can trigger a build by clicking the spanner in the builds tab or by committing some code to the branch.
+4. Initially there will be no builds available.  You can trigger a build by clicking the spanner in the builds tab or by committing some code to the branch.
 ![Build settings](/assets/2016-11-21_23-05-08.png)
 
 *Gotcha - If you are using dotnet:latest as your base docker image, it could be that the latest sdk+runtime are more recent than your app's and may not work.  To be sure the image will work, you can specify the exact version of sdk that you want to use:*
