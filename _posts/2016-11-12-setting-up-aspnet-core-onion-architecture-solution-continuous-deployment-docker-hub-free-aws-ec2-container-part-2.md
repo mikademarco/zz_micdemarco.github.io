@@ -25,7 +25,7 @@ tags:
 
 1. Follow [this](https://docs.docker.com/docker-cloud/infrastructure/link-aws/) guide from docker on how to link your docker account with AWS
 
-2. In the [docker console](https://cloud.docker.com) under [ Cloud Settings ] -> [ Source Providers ] connect your BitBucket/GitHub account 
+2. In the [docker console](https://cloud.docker.com) under [ Cloud Settings ] > [ Source Providers ] connect your BitBucket/GitHub account 
 
 When you are finished you will be able to see all the linked providers under Cloud Settings.  It should looks like this:
 
