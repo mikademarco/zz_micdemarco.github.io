@@ -15,6 +15,11 @@ tags:
 - free
 ---
 
+
+# Part 2 - Setting up continuous deployment of the solution using docker hub running on a free aws EC2 container
+
+This post continues from [Part 1](2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-1/) Creating a new aspnet core solution in visual studio with multiple projects, following the onion architecture and running it in a docker container.
+
 # Step 4 - Create a docker hub account and AWS account
 
 1. Sign up for a free docker hub account [here](https://hub.docker.com//)
@@ -48,7 +53,7 @@ Once it is deployed you will see it under node clusters :
 
 1. Go to repositories and click create
 2. Enter a name for the reporitory
-3. Select a repository that you would like to publish and choose a source branch
+3. Select a repository that you would like to publish and choose a source branch.  I will use the [GitHub repository](https://github.com/micdemarco/Mic.Fraz) from [Part 1](/2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-1/). 
 
 ![Repository settings](/assets/2016-11-21_22-53-16.png)
 
