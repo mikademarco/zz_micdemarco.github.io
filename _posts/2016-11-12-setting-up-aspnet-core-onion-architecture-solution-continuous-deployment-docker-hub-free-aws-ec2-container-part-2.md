@@ -73,19 +73,12 @@ Once the container has been built you will be able to run the built docker image
 
 1. Open the repository and click the [ Launch Service ] button on the General tab
 2. Set autoredeploy to true.  This will ensure the container will be deployed with the latest image every time one gets built
-
-![Autoredeploy on](/assets/2016-11-22_08-47-22.png)
-
+![Autoredeploy on](/assets/2016-11-22_08-47-22.png) 
 3. Set the port to published and enter a node port.  This will tell the container to map port 5000 to external port port 8080
-
 ![Publish port](/assets/2016-11-22_08-55-05.png)
-
 4. Click [ Create & Deploy ].  The service will show up as running in the services page
-
 ![Service running](/assets/2016-11-22_09-14-23.png)
-
 5. Test the image using the service endpoint. Read [here](https://docs.docker.com/docker-cloud/apps/ports/) about the difference between container and service endpoints
-
 ![Endpoint working](/assets/2016-11-22_09-22-44.png) 
 
 # Step 9 - Redeploy
@@ -106,11 +99,8 @@ public async Task<User> GetAsync(int id)
 ```
 2. Commit and push changes
 3. Check the builds tab in docker
-
 ![Building](/assets/2016-11-22_09-34-56.png)
-
 4. Once the build is done. Test
-
 ![Changes](/assets/2016-11-22_09-37-51.png)
 
 # Conclusion
