@@ -33,7 +33,7 @@ When you are finished you will be able to see all the linked providers under Clo
 
 # Step 6 - Create a cluster in Docker Hub
 
-1. Go to [ Infrastructure ] -> [ Node Clusters ] and click Create
+1. Go to [ Infrastructure ] > [ Node Clusters ] and click Create
 
 2. Enter a name, provider, region and select a size for your node cluster
  *Note - At time of writing the AWS free tier allows you to run a t2.micro instance for 750 hrs per month*
