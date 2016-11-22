@@ -94,7 +94,7 @@ The repository has now set up for Continuous Deployment.  If a change is made to
 
 1. Let's change the format of the user name to 'Fraz-...'
 
-    ```csharp
+    ```
     public async Task<User> GetAsync(int id)
     {     
         // TODO: replace with an async database operation  
