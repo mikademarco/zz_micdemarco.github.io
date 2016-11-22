@@ -54,9 +54,12 @@ Once it is deployed you will see it under node clusters :
 1. Go to repositories and click create
 2. Enter a name for the reporitory
 3. Select a repository that you would like to publish and choose a source branch.  I will use the [GitHub repository](https://github.com/micdemarco/Mic.Fraz) from [Part 1](/2016/11/12/setting-up-aspnet-core-onion-architecture-solution-continuous-deployment-docker-hub-free-aws-ec2-container-part-1/). 
-![Repository settings](/assets/2016-11-21_22-53-16.png)
+
+    ![Repository settings](/assets/2016-11-21_22-53-16.png)
+
 4. Initially there will be no builds available.  You can trigger a build by clicking the spanner in the builds tab or by committing some code to the branch.
-![Build settings](/assets/2016-11-21_23-05-08.png)
+
+    ![Build settings](/assets/2016-11-21_23-05-08.png)
 
 *Gotcha - If you are using dotnet:latest as your base docker image, it could be that the latest sdk+runtime are more recent than your app's and may not work.  To be sure the image will work, you can specify the exact version of sdk that you want to use:*
 
@@ -70,35 +73,48 @@ Once the container has been built you will be able to run the built docker image
 
 1. Open the repository and click the [ Launch Service ] button on the General tab
 2. Set autoredeploy to true.  This will ensure the container will be deployed with the latest image every time one gets built
-![Autoredeploy on](/assets/2016-11-22_08-47-22.png) 
+
+    ![Autoredeploy on](/assets/2016-11-22_08-47-22.png) 
+
 3. Set the port to published and enter a node port.  This will tell the container to map port 5000 to external port port 8080
-![Publish port](/assets/2016-11-22_08-55-05.png)
+
+    ![Publish port](/assets/2016-11-22_08-55-05.png)
+
 4. Click [ Create & Deploy ].  The service will show up as running in the services page
-![Service running](/assets/2016-11-22_09-14-23.png)
+
+    ![Service running](/assets/2016-11-22_09-14-23.png)
+
 5. Test the image using the service endpoint. Read [here](https://docs.docker.com/docker-cloud/apps/ports/) about the difference between container and service endpoints
-![Endpoint working](/assets/2016-11-22_09-22-44.png) 
+
+    ![Endpoint working](/assets/2016-11-22_09-22-44.png) 
 
 # Step 9 - Redeploy
 
 The repository has now set up for Continuous Deployment.  If a change is made to the source control, Docker will automatically build the image and update the container with the latest build.
 
 1. Let's change the format of the user name to 'Fraz-...'
-```csharp
-public async Task<User> GetAsync(int id)
-{     
-    // TODO: replace with an async database operation  
-    return new User()
-    {
-        Id = id,
-        Name = $"Fraz-{id}-{Guid.NewGuid()}"
-    };
-}
-```
+
+    ```csharp
+    public async Task<User> GetAsync(int id)
+    {     
+        // TODO: replace with an async database operation  
+        return new User()
+        {
+            Id = id,
+            Name = $"Fraz-{id}-{Guid.NewGuid()}"
+        };
+    }
+    ```
+
 2. Commit and push changes
+
 3. Check the builds tab in docker
-![Building](/assets/2016-11-22_09-34-56.png)
+
+    ![Building](/assets/2016-11-22_09-34-56.png)
+
 4. Once the build is done. Test
-![Changes](/assets/2016-11-22_09-37-51.png)
+
+    ![Changes](/assets/2016-11-22_09-37-51.png)
 
 # Conclusion
 
