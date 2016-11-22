@@ -92,9 +92,9 @@ Once the container has been built you will be able to run the built docker image
 
 The repository has now set up for Continuous Deployment.  If a change is made to the source control, Docker will automatically build the image and update the container with the latest build.
 
-1. Let's change the format of the user name to 'Fraz-...'
+Let's change the format of the user name to 'Fraz-...'
 
-    ```
+```csharp
     public async Task<User> GetAsync(int id)
     {     
         // TODO: replace with an async database operation  
@@ -104,15 +104,15 @@ The repository has now set up for Continuous Deployment.  If a change is made to
             Name = $"Fraz-{id}-{Guid.NewGuid()}"
         };
     }
-    ```
+```
 
-2. Commit and push changes
+1. Commit and push changes
 
-3. Check the builds tab in docker
+2. Check the builds tab in docker
 
     ![Building](/assets/2016-11-22_09-34-56.png)
 
-4. Once the build is done. Test
+3. Once the build is done. Test
 
     ![Changes](/assets/2016-11-22_09-37-51.png)
 
