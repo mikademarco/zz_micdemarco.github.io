@@ -85,11 +85,59 @@ Next we need to add front end packages to the project using bower.
 
 1. Add a file bower.json to the project root
 
-{% gist micdemarco/8469cb120eb20e1313b4 %}
+```json
+{
+  "name": "Demo.WebUI",
+  "version": "0.1.0",
+  "description": "Demo.WebUI",
+  "main": "/index.html",
+  "moduleType": [
+    "yui"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.15",
+    "angular-animate": "~1.3.15",
+    "angular-sanitize": "~1.3.15",
+    "angular-route": "~1.3.15",
+    "angular-toastr": "^1.4.1",
+    "angular-motion": "^0.4.2",
+    "angular-strap": "^2.2.3",
+    "bootstrap": "^3.3.4",
+    "bootstrap-additions": "^0.3.1",
+    "underscore": "^1.8.3",
+    "animate-css": "^3.3.0",
+    "font-awesome": "^4.3.0",
+    "moment": "~2.10.3",
+    "lodash": "~3.9.3"
+  }
+}
+```
 
 2. Add a file packages.json to the project root
 
-{% gist micdemarco/54d241a4a33050893f21 %}
+```json
+{
+  "name": "Demo.WebUI",
+  "version": "0.1.0",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-less": "^3.0.3",
+    "gulp-watch": "^4.2.4",
+    "gulp-rimraf": "2.3.3",
+    "run-sequence": "^1.1.0",
+    "gulp-bundle-assets": "^2.20.0"
+  }
+}
+```
 
 3. Open a command prompt and run
 
@@ -169,11 +217,41 @@ Approach
 
 1. Create a master style.less that points to all application less files:
 
-{% gist micdemarco/b18032252bc51943fc66 %}
+```less
+@import '../../bower_components/bootstrap/less/bootstrap.less';
+
+@import 'variables';
+@import 'button';
+@import 'summary';
+@import 'login';
+@import 'footer';
+@import 'icons';
+@import 'label';
+@import 'starter';
+@import 'feedback';
+```
 
 2. Create a gulp task to watch you less files, and compile the less:
 
-{% gist micdemarco/3e083b51ecb83e4059b4 %}
+```javascript
+/// <vs SolutionOpened='dev:watch' />
+var gulp = require('gulp');
+var watch = require('gulp-watch');
+var less = require('gulp-less');
+var runSequence = require('run-sequence');
+
+gulp.task('less', function () {
+    return gulp.src('./Content/Css/style.less')
+      .pipe(less())
+      .pipe(gulp.dest('./Content/Css/'));
+});
+
+gulp.task('dev:watch', function() {
+    watch('./Content/Css/**/*.less', function() {
+        runSequence('less');
+    });
+});
+```
 
 Note: Line 1 tells the Task Runner plugin to run the task.  This is slightly different in VS 2015
 /// <vs SolutionOpened='dev:watch' />
@@ -225,11 +303,70 @@ Approach:
 This file will go under
 C:\Code\Demo\Demo.WebUI\Content\Bundles\bundle.main.copy.config
 
-{% gist micdemarco/052f3e3c941a3caeb9a3 %}
+```javascript
+module.exports = {
+    bundle: {
+        "main-scripts": {
+            scripts: [
+                './Content/App/app.js',
+                './Content/App/app.config.js',
+                './Content/App/app.config.routes.js',
+                './Content/App/shared/**/*.filter.js',
+                './Content/App/shared/**/*.service.js',
+                './Content/App/shared/**/*.directive.js',
+                './Content/App/components/**/*.filter.js',
+                './Content/App/components/**/*.service.js',
+                './Content/App/components/**/*.directive.js',
+                './Content/App/components/**/*.controller.js'
+            ],
+            options: {
+                useMin: false,
+                uglify: true,
+                rev: false,
+                maps: true
+            }
+        }
+    }
+
+};
+```
 
 4. Create a new task in the gulpfile.js to build the scripts and extend the watch task:
 
-{% gist micdemarco/8268d10fd10bb423bf9b %}
+```javascript
+/// <vs SolutionOpened='dev:watch' />
+var gulp = require('gulp');
+var watch = require('gulp-watch');
+var less = require('gulp-less');
+var runSequence = require('run-sequence');
+var bundle = require('gulp-bundle-assets');
+
+var paths = {
+    debugRoot: './Content/Bundles/Debug/',
+};
+
+gulp.task('less', function () {
+    return gulp.src('./Content/Css/style.less')
+      .pipe(less())
+      .pipe(gulp.dest('./Content/Css/'));
+});
+ 
+gulp.task('dev:watch', function() {
+    watch('./Content/Css/**/*.less', function() {
+        runSequence('less');
+    });
+    watch('./Content/App/**/*.js', function () {
+        runSequence('bundle:main:scripts');
+    });
+});
+
+gulp.task('bundle:main:scripts', function() {
+    return gulp.src('./Content/Bundles/bundle.main.scripts.config.js')
+        .pipe(bundle())
+        .pipe(bundle.results({ dest: paths.debugRoot, fileName: 'scripts' }))
+        .pipe(gulp.dest(paths.debugRoot+'assets'));
+});
+```
 
 **Note: the rev:false option will always generate the same output file.  **
 
@@ -264,23 +401,220 @@ I would now like to take my front end build a few steps farther.  I would like 
 
 1. Add a bundle config for main styles:
 
-{% gist micdemarco/6785bc49ee9420aae0be %}
+```javascript
+module.exports = {
+    bundle: {
+        "main-styles": {
+            styles: [
+                './Content/Css/style.css'
+            ],
+            options: {
+                useMin: true,
+                uglify: true,
+                rev: true,
+                maps: true
+            }
+        }
+    }
+};
+```
 
 2. Add a bundle config for copying template files:
 
-{% gist micdemarco/55c4709399dc948be15a %}
+```javascript
+module.exports = {
+    copy: [
+        {
+            src: './Content/App/**/*.html',
+            base: './Content/App/'
+        }
+    ]
+
+};
+```
 
 3. Add a bundle config for vendor files:
 
-{% gist micdemarco/3d7dfac443ff882c3db2 %}
+```javascript
+module.exports = {
+    bundle: {
+        "vendor-scripts": {
+            scripts: [
+                {
+                    src: './bower_components/angular/angular.js',
+                    minSrc: './bower_components/angular/angular.min.js'
+                }, {
+                    src: './bower_components/angular-sanitize/angular-sanitize.js',
+                    minSrc: './bower_components/angular-sanitize/angular-sanitize.min.js'
+                }, {
+                    src: './bower_components/angular-animate/angular-animate.js',
+                    minSrc: './bower_components/angular-animate/angular-animate.min.js'
+                }, {
+                    src: './bower_components/angular-route/angular-route.js',
+                    minSrc: './bower_components/angular-route/angular-route.min.js'
+                }, {
+                    src: './bower_components/angular-strap/dist/angular-strap.js',
+                    minSrc: './bower_components/angular-strap/dist/angular-strap.min.js'
+                }, {
+                    src: './bower_components/angular-strap/dist/angular-strap.tpl.js',
+                    minSrc: './bower_components/angular-strap/dist/angular-strap.tpl.min.js'
+                }, {
+                    src: './bower_components/lodash/lodash.js',
+                    minSrc: './bower_components/lodash/lodash.min.js'
+                }, {
+                    src: './bower_components/moment/moment.js',
+                    minSrc: './bower_components/moment/min/moment.min.js'
+                }, {
+                    src: './bower_components/angular-toastr/dist/angular-toastr.js',
+                    minSrc: './bower_components/angular-toastr/dist/angular-toastr.min.js'
+                }, {
+                    src: './bower_components/angular-toastr/dist/angular-toastr.tpls.js',
+                    minSrc: './bower_components/angular-toastr/dist/angular-toastr.tpls.min.js'
+                }
+            ],
+            options: {
+                useMin: true,
+                uglify: false,
+                rev: true,
+                maps: true
+            }
+        },
+        "vendor-styles": {
+            styles: [
+                {
+                    src: './bower_components/animate-css/animate.css',
+                    minSrc: './bower_components/animate-css/animate.min.css'
+                }, {
+                    src: './bower_components/font-awesome/css/font-awesome.css',
+                    minSrc: './bower_components/font-awesome/css/font-awesome.min.css'
+                }, {
+                    src: './bower_components/bootstrap-additions/dist/bootstrap-additions.css',
+                    minSrc: './bower_components/bootstrap-additions/dist/bootstrap-additions.min.css'
+                }, {
+                    src: './bower_components/angular-motion/dist/angular-motion.css',
+                    minSrc: './bower_components/angular-motion/dist/angular-motion.min.css'
+                }, {
+                    src: './bower_components/angular-toastr/dist/angular-toastr.css',
+                    minSrc: './bower_components/angular-toastr/dist/angular-toastr.min.css'
+                }
+            ],
+            options: {
+                useMin: true,
+                uglify: false,
+                rev: true,
+                maps: true
+            }
+        }
+    }
+};
+```
 
 4. Add a bundle config for copying fonts and images
 
-{% gist micdemarco/a8e6e748cb01b1917588 %}
+```javascript
+module.exports = {
+    copy: [
+        {
+            src: './bower_components/bootstrap/dist/fonts/*.{ttf,svg,woff,woff2,eot}',
+            base: './bower_components/bootstrap/dist/'
+        },
+        {
+            src: './bower_components/font-awesome/fonts/*.{ttf,svg,woff,woff2,eot}',
+            base: './bower_components/font-awesome/'
+        },
+        {
+            src: './Content/Images/**/*',
+            base: './Content/'
+        }
+    ]
+};
+```
 
 5. Add gulp tasks for each of the separate bundle config files, and a main **bundle** task to run them all in sequence:
 
-{% gist micdemarco/06661961beab095b9eca %}
+```javascript
+/// <vs BeforeBuild='bundle' SolutionOpened='dev:watch, install' />
+var gulp = require('gulp');
+var rimraf = require('gulp-rimraf');
+var watch = require('gulp-watch');
+var less = require('gulp-less');
+var path = require('path');
+var runSequence = require('run-sequence');
+var bundle = require('gulp-bundle-assets');
+var install = require("gulp-install");
+
+var paths = {
+    debugRoot: './Content/Bundles/Debug/',
+    releaseRoot: './Content/Bundles/Release/'
+};
+
+gulp.task('install', function() {
+    return gulp.src(['./bower.json', './package.json'])
+        .pipe(install());
+});
+
+gulp.task('less', function () {
+    return gulp.src('./Content/Css/style.less')
+      .pipe(less())
+      .pipe(gulp.dest('./Content/Css/'));
+});
+
+gulp.task('clean', function () {
+    return gulp.src(paths.debugRoot, { read: false })
+    .pipe(rimraf());
+});
+
+gulp.task('bundle', function () {
+    return runSequence('install', 'clean', 'bundle:main:scripts', 'bundle:main:styles', 'bundle:main:copy', 'bundle:vendor', 'bundle:copy');
+});
+
+gulp.task('dev:watch', function () {
+    watch('./Content/Css/**/*.less', function () {
+        runSequence('less', 'bundle:main:styles');
+    });
+    watch('./Content/App/**/*.js', function () {
+        runSequence('bundle:main:scripts');
+    });
+    watch('./Content/App/**/*.html', function () {
+        runSequence('bundle:main:copy');
+    });
+});
+
+gulp.task('bundle:main:scripts', function() {
+    return gulp.src('./Content/Bundles/bundle.main.scripts.config.js')
+        .pipe(bundle())
+        .pipe(bundle.results({ dest: paths.debugRoot, fileName: 'scripts' }))
+        .pipe(gulp.dest(paths.debugRoot+'assets'));
+});
+
+gulp.task('bundle:main:copy', function () {
+    return gulp.src('./Content/Bundles/bundle.main.copy.config.js')
+        .pipe(bundle())
+        .pipe(bundle.results({ dest: paths.debugRoot, fileName: 'main.copy' }))
+        .pipe(gulp.dest(paths.debugRoot));
+});
+
+gulp.task('bundle:main:styles', function () {
+    return gulp.src('./Content/Bundles/bundle.main.styles.config.js')
+        .pipe(bundle())
+        .pipe(bundle.results({ dest: paths.debugRoot, fileName: 'styles' }))
+        .pipe(gulp.dest(paths.debugRoot+'assets'));
+});
+
+gulp.task('bundle:vendor', function() {
+    return gulp.src('./Content/Bundles/bundle.vendor.config.js')
+        .pipe(bundle())
+        .pipe(bundle.results({ dest: paths.debugRoot, fileName: 'vendor' }))
+        .pipe(gulp.dest(paths.debugRoot + 'assets'));
+});
+
+gulp.task('bundle:copy', function () {
+    return gulp.src('./Content/Bundles/bundle.copy.config.js')
+        .pipe(bundle())
+        .pipe(bundle.results({ dest: paths.debugRoot, fileName: 'copy' }))
+        .pipe(gulp.dest(paths.debugRoot ));
+});
+```
 
 **Note 1: Also added an install task to run "npm install" and "bower install" from gulp**
 ** Note 2: Added task runner configuration /// <vs BeforeBuild='bundle' SolutionOpened='dev:watch, install' />**
@@ -310,7 +644,31 @@ Approach:
 
 1. Configure 2 bundles in BundleConfig.cs:
 
-{% gist micdemarco/2d306d6917914087f600 %}
+```csharp
+using System.Web.Optimization;
+
+namespace Demo.WebUI.App_Start
+{
+    public class BundleConfig
+    {
+        public static void RegisterBundles(BundleCollection bundles)
+        {
+            bundles.Add(new StyleBundle("~/bundles/styles").Include(
+                    "~/Content/Bundles/Debug/assets/vendor-styles*",
+                    "~/Content/Bundles/Debug/assets/main-styles*"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
+                    "~/Content/Bundles/Debug/assets/vendor-scripts*",
+                    "~/Content/Bundles/Debug/assets/main-scripts*"
+                ));
+
+            BundleTable.EnableOptimizations = false;
+
+        }
+    }
+}
+```
 
 **Note: The BundleConfig can be configured to serve different bundles such as Release/Debug based on the environment.**
 
@@ -360,7 +718,42 @@ Approach
 
 4. Add the following sections to your csproj at the end after all the imports sections:
 
-{% gist micdemarco/c20700926f98e5a2f0c8 %}
+```xml
+<PropertyGroup>
+		<CompileDependsOn>
+			$(CompileDependsOn);
+			GulpBuild;
+		</CompileDependsOn>	
+		 <CleanDependsOn>
+			$(CleanDependsOn);
+			GulpClean
+		  </CleanDependsOn>
+		<CopyAllFilesToSingleFolderForPackageDependsOn>
+			$(CopyAllFilesToSingleFolderForPackageDependsOn);
+			CollectGulpOutput;
+		</CopyAllFilesToSingleFolderForPackageDependsOn>
+		<CopyAllFilesToSingleFolderForMsdeployDependsOn>
+			$(CopyAllFilesToSingleFolderForMsdeployDependsOn);
+			CollectGulpOutput;
+		</CopyAllFilesToSingleFolderForMsdeployDependsOn>
+	</PropertyGroup>
+	<Target Name="GulpBuild">
+		<Exec Command="npm install" WorkingDirectory="$(ProjectDir)"/>
+		<Exec Command="gulp bundle" WorkingDirectory="$(ProjectDir)"/>
+	</Target>  
+	<Target Name="GulpClean">
+	  <Exec Command="gulp clean" WorkingDirectory="$(ProjectDir)"/>
+	</Target>
+	<Target Name="CollectGulpOutput">
+		<ItemGroup>
+			<CustomFiles Include="Content\Bundles\**\*" />
+			<FilesForPackagingFromProject Include="%(CustomFiles.Identity)">
+				<DestinationRelativePath>Content\Bundles\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+			</FilesForPackagingFromProject>
+		</ItemGroup>
+		<Message Text="CollectGulpOutput list: %(CustomFiles.Identity)" />
+	</Target>
+```
 
 5. The only files that you need to check in are your gulpfile.js and /Content/Bundles/bundle.*.js
 

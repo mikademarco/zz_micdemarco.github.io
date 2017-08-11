@@ -24,8 +24,8 @@ github_username:  micdemarco
 
 # Build settings
 markdown: kramdown
-theme: minima
-gems:
+theme: minima  
+plugins:
   - jekyll-feed
 exclude:
   - Gemfile
@@ -34,9 +34,6 @@ exclude:
   # deployment
 host: 0.0.0.0
 port: 4000
-
-gems:
-  - jekyll-gist
 
 disqus:
   shortname: micdemarco

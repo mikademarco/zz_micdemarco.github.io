@@ -24,7 +24,21 @@ I wanted to have my tests written to be independent of the Database.  In order
 
 Create an interface IAppDataModel and extract all DbSet members and SaveChanges:
 
-{% gist micdemarco/7cf17ed7ae9b77aac852 %}
+```csharp
+public interface IAppDataModel
+{
+
+    DbSet<TableEntityA> TableEntityA { get; set; }
+    DbSet<TableEntityB> TableEntityB { get; set; }
+
+    IEnumerable<SomeDataType> GetSomeData(string param1);
+
+    int SaveChanges();
+    Task<int> SaveChangesAsync();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+}
+```
 **Listing 1: Interface from your DbContext**
 
 **Tip**: To remove coupling, place the interface in a separate project named Solution.RepositoryInterfaces
@@ -33,14 +47,29 @@ Create an interface IAppDataModel and extract all DbSet members and SaveChanges:
 ### 2) Change your DbContext to implement the interface IAppDataModel
 
 
-{% gist micdemarco/28f9b6b76ef69289027b %}
+```csharp
+ public partial class AppDataModel : DbContext, IAppDataModel
+ {
+    ...
+```
 **Listing 2: Implement the interface on your DbContext**
 
 
 ### 3) Change your Business Classes to use the interface IAppDataModel
 
 
-{% gist micdemarco/0606e3cb72252b80e2a1 %}
+```csharp
+public class SettingsManager : ISettingsManager
+    {
+        private readonly IAppDataModel _appDataModel;
+
+        public SettingsManager(IAppDataModel appDataModel)
+        {
+            _elcomDataModel = appDataModel;                      
+        }
+		
+	...
+```
 **Listing 3: Use an interface instead of a direct reference to your DbContext**
 
 By using an interface, you can choose what implementation you want to pass to the business class depending on your context.  For the test project, you will pass a Test DbContext.  At runtime you will an instance of your EF DbContext.
@@ -51,21 +80,170 @@ By using an interface, you can choose what implementation you want to pass to th
 
 Add a class that inherits from DbSet and implements IQueryable and IEnumerable
 
-{% gist micdemarco/628e1fdab11a3f2f55a6 %}
+```csharp
+//
+// Code taken from http://www.asp.net/web-api/overview/testing-and-debugging/mocking-entity-framework-when-unit-testing-aspnet-web-api-2
+//
+
+public class TestDbSet<T> : DbSet<T>, IQueryable, IEnumerable<T>
+    where T : class
+{
+    ObservableCollection<T> _data;
+    IQueryable _query;
+
+    public TestDbSet()
+    {
+        _data = new ObservableCollection<T>();
+        _query = _data.AsQueryable();
+    }
+
+    public override T Add(T item)
+    {
+        
+        _data.Add(item);
+        return item;
+    }
+
+    public override T Remove(T item)
+    {
+        _data.Remove(item);
+        return item;
+    }
+
+    public override T Attach(T item)
+    {
+        _data.Add(item);
+        return item;
+    }
+
+    public override T Create()
+    {
+        return Activator.CreateInstance<T>();
+    }
+
+    public override TDerivedEntity Create<TDerivedEntity>()
+    {
+        return Activator.CreateInstance<TDerivedEntity>();
+    }
+
+    public override ObservableCollection<T> Local
+    {
+        get { return new ObservableCollection<T>(_data); }
+    }
+
+    Type IQueryable.ElementType
+    {
+        get { return _query.ElementType; }
+    }
+
+    System.Linq.Expressions.Expression IQueryable.Expression
+    {
+        get { return _query.Expression; }
+    }
+
+    IQueryProvider IQueryable.Provider
+    {
+        get { return _query.Provider; }
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return _data.GetEnumerator();
+    }
+
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    {
+        return _data.GetEnumerator();
+    }
+}
+```
 **Listing 4: TestDbSet Class**
 
 
 ### 5) Create a Test DbContext that implements your IAppDataModel
 
 
-{% gist micdemarco/bc18feac17ec3fed6c1d %}
+```csharp
+public class TestAppDataModel : IAppDataModel
+    {
+        public TestAppDataModel()
+        {
+            TableEntityA = new TestDbSet<TableEntityA>();
+            TableEntityB = new TestDbSet<TableEntityB>();
+            Seed();
+        }
+    
+        private void Seed()
+        {
+            this.TableEntityA.Add(new TableEntityA() { Id = 1, Key = "AppKeyA1" });
+            this.TableEntityA.Add(new TableEntityA() { Id = 2, Key = "AppKeyA2" });
+            this.TableEntityA.Add(new TableEntityA() { Id = 3, Key = "AppKeyA3" });
+            
+            this.TableEntityB.Add(new TableEntityB() { Id = 1, Key = "AppKeyB1" });
+            this.TableEntityB.Add(new TableEntityB() { Id = 2, Key = "AppKeyB2" });
+            this.TableEntityB.Add(new TableEntityB() { Id = 3, Key = "AppKeyB3" });
+        }
+
+        IEnumerable<SomeDataType> GetSomeData(string param1);
+        {
+            var ret = from b in TableEntityB
+                      select new SomeDataType()
+                      {
+                         EntityId = b.Id,
+                         Param = param1,
+                         CreatedUtc = DateTime.UtcNow
+                      };
+            return ret;
+        }
+
+        public int SaveChanges()
+        {
+            return 0;
+        }
+
+        public Task<int> SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose() { }
+    }
+}
+```
 **Listing 5: Creating a Test DbContext with a Seed method**
 
 
 ### 6) Use the Test DbContext in the tests
 
 
-{% gist micdemarco/fe35731e1b550c52d84b %}
+```csharp
+[TestClass()]
+    public class UserManagerTests
+    {
+        private IAppDataModel _appDataModel;
+        private ISettingsManager _settingsManager;
+        
+        public UserManagerTests()
+        {
+            _appDataModel = new TestAppDataModel();
+            _settingsManager = new SettingsManager(_appDataModel);
+        }
+		
+	[TestMethod()]
+        public void UserManager_GetUserFromEmail_ReturnsUser()
+        {
+            IUserManager userManager = new UserManager(_appDataModel, _settingsManager);
+            string userEmail = "test@office.com";
+            var user = userManager.GetUserFromEmail(userEmail);
+            Assert.AreEqual(user.strEmail, userEmail, "User loaded successfully");
+        }
+        ...
+```
 **Listing 6: Using the TestDbContext**
 
 
@@ -76,7 +254,31 @@ After implementing the Test DbContext, I realised that some of my tests were bro
 
 In order to get around this I implemented a specially derived class with an overridden Create method for every Entity that required an Identity to be generated by the database:
 
-{% gist micdemarco/f289176252e39af0939e %}
+```csharp
+// TestTableEntityBDbSet 
+
+    class TestTableEntityBDbSet : TestDbSet<TableEntityB >
+    {
+        public override TableEntityB  Add(TableEntityB item)
+        {
+            item.Id = Local.Count + 1;
+            base.Add(item);
+            return item;
+        }
+    }
+
+// TestAppDataModel 
+
+    public class TestAppDataModel : IAppDataModel
+    {
+        public TestAppDataModel()
+        {
+            TableEntityA = new TestDbSet<TableEntityA>();
+            TableEntityB = new TestTableEntityBDbSet();
+            Seed();
+        }
+        ...
+```
 **Listing 7: Inheriting from TestDbSet and overriding Create method**
 
 
